@@ -1,3 +1,4 @@
+// Global variables.
 const searchInput = document.querySelector('.search-input');
 const searchBox = new google.maps.places.SearchBox(searchInput);
 const localName = document.querySelector('.local-name');
@@ -30,7 +31,7 @@ const tomorrowPrecipitation = document.querySelector('.tomorrow-precipitation');
 const tomorrowHumidity = document.querySelector('.tomorrow-humidity');
 const tomorrowUV = document.querySelector('.tomorrow-uv');
 const loadingWeather = document.querySelector('.loading-weather');
-const notifyError = document.querySelector('.notify-error');
+const errorNotification = document.querySelector('.error-notification');
 const weatherData = document.querySelector('.weather-data');
 const showMoreButton = document.querySelector('.show-more-button');
 const moreWeatherData = document.querySelector('.more-weather-data');
@@ -39,16 +40,21 @@ const moreInfo = document.querySelector('.more-info');
 const buttonOpenMoreInfo = document.querySelector('.button-open-more-info');
 const buttonCloseMoreInfo = document.querySelector('.button-close-more-info');
 
+// Event listeners.
 showMoreButton.addEventListener('click', showMore);
 buttonScrollToTop.addEventListener('click', scrollToTop);
 buttonOpenMoreInfo.addEventListener('click', openMoreInfo);
 buttonCloseMoreInfo.addEventListener('click', closeMoreInfo);
 
-
+// Whenever the user selects one of the places that were showing in the autocomplete dropbox list, do the following:
+// - Get the latitude and longitude of the selected place.
+// - Fetch weather and air quality data of the selected place.
+// - If there were errors in the process, display an error message.
+// - Display the fetched data of the selected place in the DOM.
 searchBox.addListener('places_changed', async () => {
     try {
-        loadingWeather.style.display = 'block';
-        resetDOM();
+        resetApplication();
+        displayLoadingWeather();
         const local = searchBox.getPlaces()[0];
         const latitude = local.geometry.location.lat();
         const longitude = local.geometry.location.lng(); 
@@ -69,52 +75,52 @@ searchBox.addListener('places_changed', async () => {
         console.log(weather);
         if (weather[0] === 'Error') {
             weatherData.style.display = 'none';
-            notifyError.style.display = 'flex';
+            errorNotification.style.display = 'flex';
             return;
-        } 
-        displayData(weather, localName);
+        }
+        hideLoadingWeather();
+        displayWeather(weather, localName);
     } catch (err) {
         console.error(err);
     }
 });
 
-function displayData(data, name) {
-    loadingWeather.style.display = 'none';
+function displayWeather(data, name) {
 
-        setTimeout(() => weatherData.classList.add('weather-data-display'), 200);
-        localName.innerHTML = name;
-        getIcon(data.weather_data.current.weather[0].icon, localIcon);
-        const description = data.weather_data.current.weather[0].description;
-        const descriptionToUpperCase = description.charAt(0).toUpperCase();
-        const descriptionToLowerCase = description.slice(1).toLowerCase();
-        const descriptionAdjusted = descriptionToUpperCase + descriptionToLowerCase;
-        localDescription.innerHTML = descriptionAdjusted;
-        getTemperatureLastUpdated();
-        localTemperatureCurrent.innerHTML = `<span class="title-info">Temperature: </span>${data.weather_data.current.temp.toFixed(1)}º C`;
-        localTemperatureFeelsLike.innerHTML = `<span class="title-info">Feels like: </span>${data.weather_data.current.feels_like.toFixed(1)}º C`;
-        localTemperatureMinimum.innerHTML = `${data.weather_data.daily[0].temp.min.toFixed(1)}º C`;
-        localTemperatureMaximum.innerHTML = `${data.weather_data.daily[0].temp.max.toFixed(1)}º C`;
-        getSunriseAndSunset(data);
-        localPrecipitation.innerHTML = `<span class="title-info">Probability of precipitation: </span>${(data.weather_data.daily[0].pop * 100).toFixed(0)}%`;
-        localHumidity.innerHTML = `<span class="title-info">Humidity: </span>${data.weather_data.current.humidity}%`;
-        localWindSpeed.innerHTML = `<span class="title-info">Wind speed: </span>${data.weather_data.current.wind_speed} m/s`;
-        localWindDirection.innerHTML = `<span class="title-info">Wind direction: </span>${data.weather_data.current.wind_deg}º`;
-        localVisibility.innerHTML = `<span class="title-info">Visibility: </span>${data.weather_data.current.visibility / 1000} km`;
-        localCloudiness.innerHTML = `<span class="title-info">Cloudiness: </span>${data.weather_data.current.clouds}%`;
-        localPressure.innerHTML = `<span class="title-info">Atmospheric pressure: </span>${data.weather_data.current.pressure} nPa`;
-        localUV.innerHTML = `<span class="title-info">Ultraviolet index: </span>${data.weather_data.current.uvi}`;
-        getAirQuality(data);
-        getIcon(data.weather_data.daily[1].weather[0].icon, tomorrowIcon);
-        tomorrowAverageDescription.innerHTML = `<span class="title-info">Average weather: </span>${data.weather_data.daily[1].weather[0].description}`;
-        tomorrowTemperatureMorning.innerHTML = `<span class="title-info">Morning<br/></span>${data.weather_data.daily[1].temp.morn.toFixed(1)}º C`;
-        tomorrowTemperatureEvening.innerHTML = `<span class="title-info">Evening<br/></span>${data.weather_data.daily[1].temp.eve.toFixed(1)}º C`;
-        tomorrowTemperatureNight.innerHTML = `<span class="title-info">Night<br/></span>${data.weather_data.daily[1].temp.night.toFixed(1)}º C`;
-        tomorrowTemperatureMinimum.innerHTML = `${data.weather_data.daily[1].temp.min.toFixed(1)}º C`;
-        tomorrowTemperatureMaximum.innerHTML = `${data.weather_data.daily[1].temp.max.toFixed(1)}º C`;
-        tomorrowPrecipitation.innerHTML = `<span class="title-info">Probability of precipitation: </span>${(data.weather_data.daily[1].pop * 100).toFixed(0)}%`;
-        tomorrowHumidity.innerHTML = `<span class="title-info">Humidity: </span>${data.weather_data.daily[1].humidity}%`;
-        tomorrowUV.innerHTML = `<span class="title-info">Ultraviolet index: </span>${data.weather_data.daily[1].uvi}`;
+    setTimeout(() => weatherData.classList.add('weather-data-display'), 200);
 
+    localName.innerHTML = name;
+    getIcon(data.weather_data.current.weather[0].icon, localIcon);
+    const description = data.weather_data.current.weather[0].description;
+    const descriptionToUpperCase = description.charAt(0).toUpperCase();
+    const descriptionToLowerCase = description.slice(1).toLowerCase();
+    const descriptionAdjusted = descriptionToUpperCase + descriptionToLowerCase;
+    localDescription.innerHTML = descriptionAdjusted;
+    getTemperatureLastUpdated();
+    localTemperatureCurrent.innerHTML = `<span class="title-info">Temperature: </span>${data.weather_data.current.temp.toFixed(1)}º C`;
+    localTemperatureFeelsLike.innerHTML = `<span class="title-info">Feels like: </span>${data.weather_data.current.feels_like.toFixed(1)}º C`;
+    localTemperatureMinimum.innerHTML = `${data.weather_data.daily[0].temp.min.toFixed(1)}º C`;
+    localTemperatureMaximum.innerHTML = `${data.weather_data.daily[0].temp.max.toFixed(1)}º C`;
+    getSunriseAndSunset(data);
+    localPrecipitation.innerHTML = `<span class="title-info">Probability of precipitation: </span>${(data.weather_data.daily[0].pop * 100).toFixed(0)}%`;
+    localHumidity.innerHTML = `<span class="title-info">Humidity: </span>${data.weather_data.current.humidity}%`;
+    localWindSpeed.innerHTML = `<span class="title-info">Wind speed: </span>${data.weather_data.current.wind_speed} m/s`;
+    localWindDirection.innerHTML = `<span class="title-info">Wind direction: </span>${data.weather_data.current.wind_deg}º`;
+    localVisibility.innerHTML = `<span class="title-info">Visibility: </span>${data.weather_data.current.visibility / 1000} km`;
+    localCloudiness.innerHTML = `<span class="title-info">Cloudiness: </span>${data.weather_data.current.clouds}%`;
+    localPressure.innerHTML = `<span class="title-info">Atmospheric pressure: </span>${data.weather_data.current.pressure} nPa`;
+    localUV.innerHTML = `<span class="title-info">Ultraviolet index: </span>${data.weather_data.current.uvi}`;
+    getAirQuality(data);
+    getIcon(data.weather_data.daily[1].weather[0].icon, tomorrowIcon);
+    tomorrowAverageDescription.innerHTML = `<span class="title-info">Average weather: </span>${data.weather_data.daily[1].weather[0].description}`;
+    tomorrowTemperatureMorning.innerHTML = `<span class="title-info">Morning<br/></span>${data.weather_data.daily[1].temp.morn.toFixed(1)}º C`;
+    tomorrowTemperatureEvening.innerHTML = `<span class="title-info">Evening<br/></span>${data.weather_data.daily[1].temp.eve.toFixed(1)}º C`;
+    tomorrowTemperatureNight.innerHTML = `<span class="title-info">Night<br/></span>${data.weather_data.daily[1].temp.night.toFixed(1)}º C`;
+    tomorrowTemperatureMinimum.innerHTML = `${data.weather_data.daily[1].temp.min.toFixed(1)}º C`;
+    tomorrowTemperatureMaximum.innerHTML = `${data.weather_data.daily[1].temp.max.toFixed(1)}º C`;
+    tomorrowPrecipitation.innerHTML = `<span class="title-info">Probability of precipitation: </span>${(data.weather_data.daily[1].pop * 100).toFixed(0)}%`;
+    tomorrowHumidity.innerHTML = `<span class="title-info">Humidity: </span>${data.weather_data.daily[1].humidity}%`;
+    tomorrowUV.innerHTML = `<span class="title-info">Ultraviolet index: </span>${data.weather_data.daily[1].uvi}`;
 }
 
 function getTemperatureLastUpdated() {
@@ -222,7 +228,13 @@ function getAirQualityParameter(parameter) {
 
 
 
+function displayLoadingWeather() {
+    loadingWeather.style.display = 'block';
+}
 
+function hideLoadingWeather() {
+    loadingWeather.style.display = 'none';
+}
 
 
 
@@ -247,11 +259,11 @@ function closeMoreInfo() {
     moreInfo.style.display = 'none';
 }
 
-function resetDOM() {
-    weatherData.classList.remove('weather-data-display');
+function resetApplication() {
     searchInput.value = '';
+    weatherData.classList.remove('weather-data-display');
+    errorNotification.style.display = 'none';
     showMoreButton.style.display = 'block';
     moreWeatherData.style.display = 'none';
-    notifyError.style.display = 'none';
-    closeMoreInfo();
+    moreInfo.style.display = 'none';
 }

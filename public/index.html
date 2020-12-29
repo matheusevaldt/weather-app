@@ -10,28 +10,36 @@
     <script defer src="script.js"></script>
 </head>
 <body>
+
     <header>
         <h1>Weather App</h1>
         <input type="text" class="search-input" placeholder="Inform a location">
     </header>
+
     <main>
-    <div class="loading-weather"></div>
-        <div class="notify-error">
-            <img src="images/warning.png" alt="Warning">
+
+        <div class="loading-weather"></div>
+
+        <div class="error-notification">
+            <img src="images/attention.png" alt="Attention!">
             <h1>An error has occurred.</h1>
             <p>We were unable to display the weather information that you've requested.</p>
         </div>
+
         <div class="weather-data">
+
             <div class="weather-data-header">
                 <p class="local-name">Gravataí, RS, Brasil</p>
                 <div class="local-icon"><img src="images/clear-day.png" alt="Clear sky"></div>
                 <p class="local-description">Few clouds</p>
             </div>
+
             <div class="weather-current-feels-like">
                 <p class="temperature-last-updated"><span class="title-info">Last updated: </span>today at 07:02</p>
                 <p class="local-temperature-current"><span class="title-info">Temperature: </span>15.3º C</p>
                 <p class="local-temperature-feels-like"><span class="title-info">Feels like: </span>15.2º C</p>
             </div>
+
             <div class="weather-min-max">
                 <div class="minimum-temperature">
                     <img src="images/minimum-temperature.png" alt="Minimum temperature">
@@ -48,6 +56,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="show-more-data">
                 <button class="show-more-button">Show more</button>
                 <div class="more-weather-data">
@@ -114,7 +123,9 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
         <div class="more-info">
             <div class="more-info-apis">
                 <h1>APIs</h1>
@@ -134,6 +145,8 @@
             </div>
             <button class="button-close-more-info">Close window</button>
         </div>
+
     </main>
+
 </body>
 </html>

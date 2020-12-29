@@ -1,21 +1,22 @@
-*, *::before, *::after{
+*, 
+*::before, 
+*::after{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-button {
-    cursor: pointer;
-    font-family: 'Quicksand', sans-serif;
-}
-
-input:focus,
-button:focus {
+*:focus {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     outline: none;
-}
-
-ul {
-    list-style: none;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 :root {
@@ -26,7 +27,21 @@ ul {
     --grey-color: #c4c4c4;
 }
 
-body, html {
+ul {
+    list-style: none;
+}
+
+button,
+input {
+    font-family: 'Quicksand', sans-serif;
+}
+
+button {
+    cursor: pointer;
+}
+
+body, 
+html {
     min-height: 100%;
 }
 
@@ -37,6 +52,9 @@ body {
     background-repeat: no-repeat;
     color: var(--white-color);
 }
+
+
+
 
 header {
     margin: 30px 20px;
@@ -90,7 +108,7 @@ main {
     100% { transform: rotate(360deg); }
 }
 
-.notify-error {
+.error-notification {
     display: none;
     flex-direction: column;
     border: 1px solid var(--dark-color);
@@ -101,7 +119,7 @@ main {
     margin: 0 auto;
 }
 
-.notify-error img {
+.error-notification img {
     width: 48px;
     height: 48px;
     margin: 0 auto;
@@ -109,12 +127,12 @@ main {
     top: -5px;
 }
 
-.notify-error h1 {
+.error-notification h1 {
     font-size: 1.1em;
     margin-bottom: 5px;
 }
 
-.notify-error p {
+.error-notification p {
     font-size: 0.9em;
     font-weight: 600;
 }
@@ -533,11 +551,11 @@ main {
         margin: 50% auto 0 auto;
     }
 
-    .notify-error {
+    .error-notification {
         width: 80%;
     }
 
-    .notify-error img {
+    .error-notification img {
         top: -3px;
     }
 
