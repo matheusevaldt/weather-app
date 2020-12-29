@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather app</title>
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <script defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGkBnjAksq2CEKcmqiUIfZf38WJHdJI5I&libraries=places"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Weather App</h1>
+        <input type="text" class="search-input" placeholder="Inform a location">
+    </header>
+    <main>
+    <div class="loading-weather"></div>
+        <div class="notify-error">
+            <img src="images/warning.png" alt="Warning">
+            <h1>An error has occurred.</h1>
+            <p>We were unable to display the weather information that you've requested.</p>
+        </div>
+        <div class="weather-data">
+            <div class="weather-data-header">
+                <p class="local-name">Gravataí, RS, Brasil</p>
+                <div class="local-icon"><img src="images/clear-day.png" alt="Clear sky"></div>
+                <p class="local-description">Few clouds</p>
+            </div>
+            <div class="weather-current-feels-like">
+                <p class="temperature-last-updated"><span class="title-info">Last updated: </span>today at 07:02</p>
+                <p class="local-temperature-current"><span class="title-info">Temperature: </span>15.3º C</p>
+                <p class="local-temperature-feels-like"><span class="title-info">Feels like: </span>15.2º C</p>
+            </div>
+            <div class="weather-min-max">
+                <div class="minimum-temperature">
+                    <img src="images/minimum-temperature.png" alt="Minimum temperature">
+                    <div class="minimum-temperature-info">
+                        <p class="title-info">Today's minimum</p>
+                        <p class="local-temperature-minimum">11.8º C</p>
+                    </div>
+                </div>
+                <div class="maximum-temperature">
+                    <img src="images/maximum-temperature.png" alt="Maximum temperature">
+                    <div class="maximum-temperature-info">
+                        <p class="title-info">Today's maximum</p>
+                        <p class="local-temperature-maximum">19.9º C</p>  
+                    </div>
+                </div>
+            </div>
+            <div class="show-more-data">
+                <button class="show-more-button">Show more</button>
+                <div class="more-weather-data">
+                    <div class="weather-sunrise-sunset">
+                        <div class="sunrise-info">
+                            <img src="images/sunrise.png" alt="Sunrise">
+                            <p class="local-sunrise"><span class="title-info">Sunrise: </span>06:55</p>
+                        </div>
+                        <div class="sunset-info">
+                            <img src="images/sunset.png" alt="Sunset">
+                            <p class="local-sunset"><span class="title-info">Sunset: </span>18:00</p>
+                        </div>
+                    </div>
+                    <div class="weather-wind">
+                        <img src="images/wind.png" alt="Wind">
+                        <div class="wind-info">
+                            <p class="local-wind-speed"><span class="title-info">Wind speed: </span>2.1 m/s</p>
+                            <p class="local-wind-direction"><span class="title-info">Wind direction: </span>290º</p>
+                        </div>
+                    </div>
+                    <p class="local-precipitation"><span class="title-info">Probability of precipitation: </span>0%</p>
+                    <p class="local-humidity"><span class="title-info">Humidity: </span>93%</p>
+                    <p class="local-visibility"><span class="title-info">Visibility: </span>9 km</p>
+                    <p class="local-cloudiness"><span class="title-info">Cloudiness: </span>20%</p>
+                    <p class="local-pressure"><span class="title-info">Atmospheric pressure: </span>1017 nPa</p>
+                    <p class="local-uv"><span class="title-info">Ultraviolet index: </span>5.04</p>
+                    <p class="local-air-quality"><span class="title-info">No data about air quality.</span></p>
+                    <div class="weather-tomorrow">
+                        <div class="tomorrow-data">
+                            <p>Tomorrow's weather</p><span></span>
+                        </div>
+                        <div class="tomorrow-header">
+                            <p class="tomorrow-icon"><img src="images/scattered-clouds.png" alt="Clear sky"></p>
+                            <p class="tomorrow-average-description"><span class="title-info">Average weather: </span>scattered clouds</p>
+                        </div>
+                        <div class="tomorrow-temperatures">
+                            <p class="tomorrow-temperature-morning"><span class="title-info">Morning</span><br>7.3º C</p>
+                            <p class="tomorrow-temperature-evening"><span class="title-info">Evening</span><br>15.1º C</p>
+                            <p class="tomorrow-temperature-night"><span class="title-info">Night</span><br>11.2º C</p>
+                        </div>
+                        <div class="tomorrow-min-max">
+                            <div class="tomorrow-min">
+                                <img src="images/minimum-temperature.png" alt="Tomorrow's minimum">
+                                <div class="tomorrow-min-info">
+                                    <p class="title-info">Tomorrow's minimum</p>
+                                    <p class="tomorrow-temperature-minimum">11.8º C</p>
+                                </div>
+                            </div>
+                            <div class="tomorrow-max">
+                                <img src="images/maximum-temperature.png" alt="Tomorrow's maximum">
+                                <div class="tomorrow-max-info">
+                                    <p class="title-info">Tomorrow's maximum</p>
+                                    <p class="tomorrow-temperature-maximum">19.9º C</p>  
+                                </div>
+                            </div>
+                        </div>
+                        <p class="tomorrow-precipitation"><span class="title-info">Probability of precipitation: </span>23%</p>
+                        <p class="tomorrow-humidity"><span class="title-info">Humidity: </span>55%</p>
+                        <p class="tomorrow-uv"><span class="title-info">Ultraviolet index: </span>6.14</p>
+                        <div class="buttons">
+                            <button class="button-scroll-to-top">Scroll to the top</button>
+                            <button class="button-open-more-info">Credits and info</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="more-info">
+            <div class="more-info-apis">
+                <h1>APIs</h1>
+                <p>The following APIs are used to fetch the information the user requires.</p>
+                <a class="smaller-a" href="https://openweathermap.org/" target="_blank">Open Weather Map</a>
+                <a class="smaller-a" href="https://openaq.org/" target="_blank">Open Air Quality</a>
+                <p>The autocomplete dropdown menu is powered by <a href="https://www.google.com/" target="_blank">Google</a> and it uses the following APIs:</p>
+                <a class="smaller-a" href="https://developers.google.com/maps/documentation/javascript/places" target="_blank">Places API</a>
+                <a class="smaller-a" href="https://developers.google.com/maps/documentation/javascript/overview" target="_blank">Maps JavaScript API</a>
+            </div>
+            <div class="more-info-icons">
+                <h1>Icons</h1>
+                <p>The icons used in this application can be found in the website <a href="https://www.flaticon.com/" target="_blank">flaticon.com</a>.</p>
+                <p>The icons used in this application were created by these two authors:</p>
+                <a class="smaller-a" href="https://www.flaticon.com/authors/freepik" target="_blank">Freepik</a>
+                <a class="smaller-a" href="https://www.flaticon.com/authors/bqlqn" target="_blank">bqlqn</a>
+            </div>
+            <button class="button-close-more-info">Close window</button>
+        </div>
+    </main>
+</body>
+</html>
