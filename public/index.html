@@ -18,14 +18,6 @@
 
     <main>
 
-        <div class="loading-weather"></div>
-
-        <div class="error-notification">
-            <img src="images/attention.png" alt="Attention!">
-            <h1>An error has occurred.</h1>
-            <p>We were unable to display the weather information that you've requested.</p>
-        </div>
-
         <div class="weather-data">
 
             <div class="weather-data-header">
@@ -35,31 +27,34 @@
             </div>
 
             <div class="weather-current-feels-like">
-                <p class="temperature-last-updated"><span class="title-info">Last updated: </span>today at 07:02</p>
-                <p class="local-temperature-current"><span class="title-info">Temperature: </span>15.3º C</p>
-                <p class="local-temperature-feels-like"><span class="title-info">Feels like: </span>15.2º C</p>
+                <p class="temperature-last-updated"><span class="title-color">Last updated: </span>today at 07:02</p>
+                <p class="local-temperature-current"><span class="title-color">Temperature: </span>15.3º C</p>
+                <p class="local-temperature-feels-like"><span class="title-color">Feels like: </span>15.2º C</p>
             </div>
 
             <div class="weather-min-max">
                 <div class="minimum-temperature">
                     <img src="images/minimum-temperature.png" alt="Minimum temperature">
                     <div class="minimum-temperature-info">
-                        <p class="title-info">Today's minimum</p>
+                        <p class="title-color">Today's minimum</p>
                         <p class="local-temperature-minimum">11.8º C</p>
                     </div>
                 </div>
                 <div class="maximum-temperature">
                     <img src="images/maximum-temperature.png" alt="Maximum temperature">
                     <div class="maximum-temperature-info">
-                        <p class="title-info">Today's maximum</p>
+                        <p class="title-color">Today's maximum</p>
                         <p class="local-temperature-maximum">19.9º C</p>  
                     </div>
                 </div>
             </div>
 
-            <div class="show-more-data">
-                <button class="show-more-button">Show more</button>
+            <div class="more-data">
+
+                <button class="button-show-more">Show more</button>
+
                 <div class="more-weather-data">
+
                     <div class="weather-sunrise-sunset">
                         <div class="sunrise-info">
                             <img src="images/sunrise.png" alt="Sunrise">
@@ -70,6 +65,7 @@
                             <p class="local-sunset"><span class="title-info">Sunset: </span>18:00</p>
                         </div>
                     </div>
+
                     <div class="weather-wind">
                         <img src="images/wind.png" alt="Wind">
                         <div class="wind-info">
@@ -77,6 +73,7 @@
                             <p class="local-wind-direction"><span class="title-info">Wind direction: </span>290º</p>
                         </div>
                     </div>
+
                     <p class="local-precipitation"><span class="title-info">Probability of precipitation: </span>0%</p>
                     <p class="local-humidity"><span class="title-info">Humidity: </span>93%</p>
                     <p class="local-visibility"><span class="title-info">Visibility: </span>9 km</p>
@@ -121,7 +118,9 @@
                             <button class="button-open-more-info">Credits and info</button>
                         </div>
                     </div>
+
                 </div>
+
             </div>
 
         </div>
@@ -145,6 +144,14 @@
             </div>
             <button class="button-close-more-info">Close window</button>
         </div>
+
+        <div class="error-notification">
+            <img src="images/attention.png" alt="Attention!">
+            <h1>An error has occurred.</h1>
+            <p>We were unable to display the weather information that you've requested.</p>
+        </div>
+    
+        <div class="loading-weather"></div>
 
     </main>
 

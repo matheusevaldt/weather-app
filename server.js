@@ -15,7 +15,9 @@ app.post('/weather', async (request, response) => {
         const url_openAirQuality = `https://api.openaq.org/v1/latest?coordinates=${request.body.latitude},${request.body.longitude}`;
         const openWeatherMapResponse = await fetch(url_openWeatherMap);
         const openAirQualityResponse = await fetch(url_openAirQuality);
-        if (!openWeatherMapResponse.ok || !openAirQualityResponse.ok) throw new Error('Unable to fetch the data from the APIs');
+        if (!openWeatherMapResponse.ok || !openAirQualityResponse.ok) {
+            throw new Error('Unable to fetch the data from the APIs');
+        }
         const openWeatherMapJSON = await openWeatherMapResponse.json();
         const openAirQualityJSON = await openAirQualityResponse.json();
         const data = {
@@ -25,7 +27,7 @@ app.post('/weather', async (request, response) => {
         response.json(data);
     } catch (err) {
         response.json(['Error', err.message]);
-        console.log(err.message);
+        console.log(err);
     }
 });
 

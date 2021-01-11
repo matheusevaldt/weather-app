@@ -191,8 +191,12 @@ main {
 .weather-min-max {
     padding: 0 20px;
 }
-
+/* 
 .title-info {
+    color: var(--grey-color);
+} */
+
+.title-color {
     color: var(--grey-color);
 }
 
@@ -239,11 +243,11 @@ main {
     padding-left: 1px;
 }
 
-.show-more-data {
+.more-data {
     margin-top: 25px;
 }
 
-.show-more-button {
+.button-show-more {
     padding: 10px 13px;
     background-color: var(--blue-color);
     color: var(--white-color);
@@ -257,7 +261,7 @@ main {
     transition: background-color 0.4s ease-out;
 }
 
-.show-more-button:hover {
+.button-show-more:hover {
     background-color: #008086;
 }
 
@@ -597,11 +601,11 @@ main {
         padding-left: 2px;
     }
 
-    .show-more-data {
+    .more-data {
         margin: 45px 0 0 0;
     }
 
-    .show-more-button {
+    .button-show-more {
         padding: 12px 18px;
         border-radius: 8px;
     }
