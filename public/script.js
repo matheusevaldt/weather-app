@@ -80,8 +80,6 @@ searchBox.addListener('places_changed', async () => {
             errorNotification.style.display = 'flex';
             return;
         }
-        // hideLoadingWeather();
-        // displayWeather(weather, localName);
         assignData(weather, localName);
     } catch (err) {
         console.error(err);
