@@ -2,26 +2,9 @@
 const searchInput = document.querySelector('.search-input');
 const searchBox = new google.maps.places.SearchBox(searchInput);
 
-// const localName = document.querySelector('.local-name');
 const localIcon = document.querySelector('.local-icon');
-// const localDescription = document.querySelector('.local-description');
-// const temperatureLastUpdated = document.querySelector('.temperature-last-updated');
-// const localTemperatureCurrent = document.querySelector('.local-temperature-current');
-// const localTemperatureFeelsLike = document.querySelector('.local-temperature-feels-like');
-// const localTemperatureMinimum = document.querySelector('.local-temperature-minimum');
-// const localTemperatureMaximum = document.querySelector('.local-temperature-maximum');
-// const localSunrise = document.querySelector('.local-sunrise');
-// const localSunset = document.querySelector('.local-sunset');
-const localPrecipitation = document.querySelector('.local-precipitation');
-const localHumidity = document.querySelector('.local-humidity');
-// const localWindSpeed = document.querySelector('.local-wind-speed');
-// const localWindDirection = document.querySelector('.local-wind-direction');
-const localVisibility = document.querySelector('.local-visibility');
-const localCloudiness = document.querySelector('.local-cloudiness');
-const localPressure = document.querySelector('.local-pressure');
-const localUV = document.querySelector('.local-uv');
-const localAirQuality = document.querySelector('.local-air-quality');
 const tomorrowIcon = document.querySelector('.tomorrow-icon');
+
 const tomorrowAverageDescription = document.querySelector('.tomorrow-average-description');
 const tomorrowTemperatureMorning = document.querySelector('.tomorrow-temperature-morning');
 const tomorrowTemperatureEvening = document.querySelector('.tomorrow-temperature-evening');
@@ -89,12 +72,20 @@ searchBox.addListener('places_changed', async () => {
 function assignData(data, name) {
     setTimeout(() => weatherData.classList.add('weather-data-display'), 200);
     displayHeaderData(data.weather_data.current.weather[0].description, name);
-    displayHeaderIcon(data.weather_data.current.weather[0].icon, localIcon);
+    displayIcons(data.weather_data.current.weather[0].icon, localIcon);
     displayTemperature(data.weather_data);
     displayTemperatureLastUpdated();
     displaySunrise(data.weather_data.current.sunrise, data.weather_data.timezone_offset);
     displaySunset(data.weather_data.current.sunset, data.weather_data.timezone_offset);
     displayWind(data.weather_data.current);
+    displayPrecipitation(data.weather_data.daily[0].pop);
+    displayHumidity(data.weather_data.current.humidity);
+    displayVisibility(data.weather_data.current.visibility);
+    displayCloudiness(data.weather_data.current.clouds);
+    displayPressure(data.weather_data.current.pressure);
+    displayUltravioletIndex(data.weather_data.current.uvi);
+    displayAirQuality(data.air_quality_data);
+    displayIcons(data.weather_data.daily[1].weather[0].icon, tomorrowIcon);
 }
 
 function displayHeaderData(localDescription, localName) {
@@ -106,7 +97,7 @@ function displayHeaderData(localDescription, localName) {
     document.querySelector('.local-name').innerHTML = localName;
 }
 
-function displayHeaderIcon(id, where) {
+function displayIcons(id, where) {
     const icons = {
         '01d': '<img src="images/clear-day.png" alt="Clear sky">',
         '01n': '<img src="images/clear-night.png" alt="Clear sky">',
@@ -196,10 +187,63 @@ function displayWind(wind) {
     document.querySelector('.local-wind-direction').innerHTML = `<span class="title-color">Wind direction:</span> ${wind.wind_deg}º`;
 }
 
+function displayPrecipitation(precipitation) {
+    document.querySelector('.local-precipitation').innerHTML = `<span class="title-color">Probability of precipitation:</span> ${(precipitation * 100).toFixed(0)}%`;
+}
+
+function displayHumidity(humidity) {
+    document.querySelector('.local-humidity').innerHTML = `<span class="title-color">Humidity:</span> ${humidity}%`;
+}
+
+function displayVisibility(visibility) {
+    document.querySelector('.local-visibility').innerHTML = `<span class="title-color">Visibility:</span> ${visibility / 1000} km`;
+}
+
+function displayCloudiness(cloudiness) {
+    document.querySelector('.local-cloudiness').innerHTML = `<span class="title-color">Cloudiness:</span> ${cloudiness}%`;
+}
+
+function displayPressure(pressure) {
+    document.querySelector('.local-pressure').innerHTML = `<span class="title-color">Atmospheric pressure:</span> ${pressure} nPa`;
+}
+
+function displayUltravioletIndex(uv) {
+    document.querySelector('.local-uv').innerHTML = `<span class="title-color">Ultraviolet index:</span> ${uv}`;
+}
+
+function displayAirQuality(data) {
+    const localAirQuality = document.querySelector('.local-air-quality');
+    if (data.results.length !== 0) {
+        const airQuality = data.results[0].measurements[0];
+        const lastUpdated = airQuality.lastUpdated.split('T')[0];
+        const lastUpdatedSplitted = lastUpdated.split('-');
+        const lastUpdatedAdjusted = `${lastUpdatedSplitted[2]}/${lastUpdatedSplitted[1]}/${lastUpdatedSplitted[0]}`
+        localAirQuality.innerHTML = `
+            <span class="title-color">Air quality:</span> 
+            ${getAirQualityParameter(airQuality.parameter)} is at ${airQuality.value.toFixed(1)} ${airQuality.unit}. 
+            Last updated in ${lastUpdatedAdjusted}.
+        `;
+    } else {
+        localAirQuality.innerHTML = '<span class="title-color">No data about air quality.</span>';
+    }
+}
+
+function getAirQualityParameter(parameter) {
+    const parameters = {
+        'pm25': 'PM<span style="vertical-align: sub; font-size: 10px">2.5</span> (Particulate Matter 2.5)',
+        'pm10': 'PM<span style="vertical-align: sub; font-size: 10px">10</span> (Particulate Matter 10)',
+        'so2': 'SO<span style="vertical-align: sub; font-size: 10px">2</span> (Sulfur Dioxide)',
+        'no2': 'NO<span style="vertical-align: sub; font-size: 10px">2</span> (Nitrogen Dioxide)',
+        'o3': 'O<span style="vertical-align: sub; font-size: 10px">3</span> (Ozone 3)',
+        'co': 'CO (Carbon Monoxide)',
+        'bc': 'BC (Black Carbon)',
+        default: '[Parameter not found]'
+    }
+    return parameters[parameter] || parameters.default;
+}
+
 // function displayWeather(data, name) {
-
 //     setTimeout(() => weatherData.classList.add('weather-data-display'), 200);
-
 //     localName.innerHTML = name;
 //     getIcon(data.weather_data.current.weather[0].icon, localIcon);
 //     const description = data.weather_data.current.weather[0].description;
@@ -223,6 +267,7 @@ function displayWind(wind) {
 //     localUV.innerHTML = `<span class="title-info">Ultraviolet index: </span>${data.weather_data.current.uvi}`;
 //     getAirQuality(data);
 //     getIcon(data.weather_data.daily[1].weather[0].icon, tomorrowIcon);
+
 //     tomorrowAverageDescription.innerHTML = `<span class="title-info">Average weather: </span>${data.weather_data.daily[1].weather[0].description}`;
 //     tomorrowTemperatureMorning.innerHTML = `<span class="title-info">Morning<br/></span>${data.weather_data.daily[1].temp.morn.toFixed(1)}º C`;
 //     tomorrowTemperatureEvening.innerHTML = `<span class="title-info">Evening<br/></span>${data.weather_data.daily[1].temp.eve.toFixed(1)}º C`;
@@ -232,110 +277,8 @@ function displayWind(wind) {
 //     tomorrowPrecipitation.innerHTML = `<span class="title-info">Probability of precipitation: </span>${(data.weather_data.daily[1].pop * 100).toFixed(0)}%`;
 //     tomorrowHumidity.innerHTML = `<span class="title-info">Humidity: </span>${data.weather_data.daily[1].humidity}%`;
 //     tomorrowUV.innerHTML = `<span class="title-info">Ultraviolet index: </span>${data.weather_data.daily[1].uvi}`;
+
 // }
-
-// function getTemperatureLastUpdated() {
-//     const date = new Date();
-//     let hours = date.getHours();
-//     let minutes = date.getMinutes();
-//     hours = hours < 10 ? `0${hours}` : hours;
-//     minutes = minutes < 10 ? `0${minutes}`: minutes;
-//     temperatureLastUpdated.innerHTML = `<span class="title-info">Last updated:</span> today at ${hours}:${minutes}`;
-// }
-
-// function getSunriseAndSunset(data) {
-//     const timezoneOffset = data.weather_data.timezone_offset;
-//     const adjustHours = timezoneOffset / 3600;
-//     const sunriseUnixTimestamp = data.weather_data.current.sunrise;
-//     const sunsetUnixTimestamp = data.weather_data.current.sunset;
-//     const sunriseMilliseconds = sunriseUnixTimestamp * 1000;
-//     const sunsetMilliseconds = sunsetUnixTimestamp * 1000;
-//     const sunriseObject = new Date(sunriseMilliseconds);
-//     const sunsetObject = new Date(sunsetMilliseconds);
-//     let sunriseHours = sunriseObject.getUTCHours();
-//     let sunsetHours = sunsetObject.getUTCHours();
-
-//     sunsetHours = sunsetHours + 24;
-//     if (adjustHours < 0) {
-//         const sunriseDifference = adjustHours.toString().substring(1);
-//         const sunsetDifference = adjustHours.toString().substring(1);
-//         sunriseHours = sunriseHours - sunriseDifference;
-//         sunsetHours = sunsetHours - sunsetDifference;
-//     } else {
-//         sunriseHours = sunriseHours + adjustHours;
-//         sunsetHours = sunsetHours + adjustHours;
-//     }
-
-//     if (sunriseHours > 24) {
-//         sunriseHours = sunriseHours - 24;
-//     }
-
-//     if (sunsetHours > 24) {
-//         sunsetHours = sunsetHours - 24;
-//     }
-
-//     const sunriseHoursAdjusted = sunriseHours < 10 ? `0${sunriseHours}` : sunriseHours;
-//     const sunriseMinutes = sunriseObject.getMinutes() < 10 ? `0${sunriseObject.getMinutes()}` : sunriseObject.getMinutes();
-//     const sunsetHoursAdjusted = sunsetHours < 10 ? `0${sunsetHours}` : sunsetHours;
-//     const sunsetMinutes = sunsetObject.getMinutes() < 10 ? `0${sunsetObject.getMinutes()}` : sunsetObject.getMinutes();
-//     localSunrise.innerHTML = `<span class="title-info">Sunrise: </span>${sunriseHoursAdjusted}:${sunriseMinutes}`;
-//     localSunset.innerHTML = `<span class="title-info">Sunset: </span>${sunsetHoursAdjusted}:${sunsetMinutes}`;
-// }
-
-// function getIcon(id, where) {
-//     const icons = {
-//         '01d': '<img src="images/clear-day.png" alt="Clear sky">',
-//         '01n': '<img src="images/clear-night.png" alt="Clear sky">',
-//         '02d': '<img src="images/partly-cloudy-day.png" alt="Partly cloudy">',
-//         '02n': '<img src="images/partly-cloudy-night.png" alt="Partly cloudy">',
-//         '03d': '<img src="images/scattered-clouds.png" alt="Scattered clouds">',
-//         '03n': '<img src="images/scattered-clouds.png" alt="Scattered clouds">',
-//         '04d': '<img src="images/overcast-clouds.png" alt="Overcast clouds">',
-//         '04n': '<img src="images/overcast-clouds.png" alt="Overcast clouds">',
-//         '09d': '<img src="images/rain.png" alt="Rain">',
-//         '09n': '<img src="images/rain.png" alt="Rain">',
-//         '10d': '<img src="images/rain.png" alt="Rain">',
-//         '10n': '<img src="images/rain.png" alt="Rain">',
-//         '11d': '<img src="images/thunderstorm.png" alt="Thunderstorm">',
-//         '11n': '<img src="images/thunderstorm.png" alt="Thunderstorm">',
-//         '13d': '<img src="images/snow.png" alt="Snow">',
-//         '13n': '<img src="images/snow.png" alt="Snow">',
-//         '50d': '<img src="images/mist.png" alt="Mist">',
-//         '50n': '<img src="images/mist.png" alt="Mist">',
-//         default: '[Icon not found]'
-//     }
-//     return where.innerHTML = icons[id] || icons.default;
-// }
-
-// function getAirQuality(data) {
-//     if (data.air_quality_data.results.length !== 0) {
-//         const airQuality = data.air_quality_data.results[0].measurements[0];
-//         const lastUpdated = airQuality.lastUpdated.split('T')[0];
-//         const lastUpdatedSplitted = lastUpdated.split('-');
-//         const lastUpdatedAdjusted = `${lastUpdatedSplitted[2]}/${lastUpdatedSplitted[1]}/${lastUpdatedSplitted[0]}`
-//         localAirQuality.innerHTML = `<span class="title-info">Air quality: </span>${getAirQualityParameter(airQuality.parameter)} is at ${airQuality.value.toFixed(1)} ${airQuality.unit}. Last updated in ${lastUpdatedAdjusted}.`;
-//     } else {
-//         localAirQuality.innerHTML = '<span class="title-info">No data about air quality.</span>';
-//     }
-// }
-
-// function getAirQualityParameter(parameter) {
-//     const parameters = {
-//         'pm25': 'PM<span style="vertical-align: sub; font-size: 10px">2.5</span> (Particulate Matter 2.5)',
-//         'pm10': 'PM<span style="vertical-align: sub; font-size: 10px">10</span> (Particulate Matter 10)',
-//         'so2': 'SO<span style="vertical-align: sub; font-size: 10px">2</span> (Sulfur Dioxide)',
-//         'no2': 'NO<span style="vertical-align: sub; font-size: 10px">2</span> (Nitrogen Dioxide)',
-//         'o3': 'O<span style="vertical-align: sub; font-size: 10px">3</span> (Ozone 3)',
-//         'co': 'CO (Carbon Monoxide)',
-//         'bc': 'BC (Black Carbon)',
-//         default: '[Parameter not found]'
-//     }
-//     return parameters[parameter] || parameters.default;
-// }
-
-
-
-
 
 
 
@@ -346,8 +289,6 @@ function displayLoadingWeather() {
 function hideLoadingWeather() {
     loadingWeather.style.display = 'none';
 }
-
-
 
 function showMore() {
     buttonShowMore.style.display = 'none';

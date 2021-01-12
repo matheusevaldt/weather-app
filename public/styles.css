@@ -53,9 +53,6 @@ body {
     color: var(--white-color);
 }
 
-
-
-
 header {
     margin: 30px 20px;
 }
@@ -191,10 +188,6 @@ main {
 .weather-min-max {
     padding: 0 20px;
 }
-/* 
-.title-info {
-    color: var(--grey-color);
-} */
 
 .title-color {
     color: var(--grey-color);
