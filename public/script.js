@@ -1,19 +1,8 @@
 // Global variables.
 const searchInput = document.querySelector('.search-input');
 const searchBox = new google.maps.places.SearchBox(searchInput);
-
 const localIcon = document.querySelector('.local-icon');
 const tomorrowIcon = document.querySelector('.tomorrow-icon');
-
-const tomorrowAverageDescription = document.querySelector('.tomorrow-average-description');
-const tomorrowTemperatureMorning = document.querySelector('.tomorrow-temperature-morning');
-const tomorrowTemperatureEvening = document.querySelector('.tomorrow-temperature-evening');
-const tomorrowTemperatureNight = document.querySelector('.tomorrow-temperature-night');
-const tomorrowTemperatureMinimum = document.querySelector('.tomorrow-temperature-minimum');
-const tomorrowTemperatureMaximum = document.querySelector('.tomorrow-temperature-maximum');
-const tomorrowPrecipitation = document.querySelector('.tomorrow-precipitation');
-const tomorrowHumidity = document.querySelector('.tomorrow-humidity');
-const tomorrowUV = document.querySelector('.tomorrow-uv');
 const loadingWeather = document.querySelector('.loading-weather');
 const errorNotification = document.querySelector('.error-notification');
 const weatherData = document.querySelector('.weather-data');
@@ -59,7 +48,7 @@ searchBox.addListener('places_changed', async () => {
         console.log(weather);
         hideLoadingWeather();
         if (weather[0] === 'Error') {
-            weatherData.style.display = 'none';
+            weatherData.classList.remove('weather-data-display');
             errorNotification.style.display = 'flex';
             return;
         }
@@ -85,7 +74,12 @@ function assignData(data, name) {
     displayPressure(data.weather_data.current.pressure);
     displayUltravioletIndex(data.weather_data.current.uvi);
     displayAirQuality(data.air_quality_data);
+    displayTomorrowHeader(data.weather_data.daily[1].weather[0].description);
     displayIcons(data.weather_data.daily[1].weather[0].icon, tomorrowIcon);
+    displayTomorrowTemperature(data.weather_data.daily[1].temp);
+    displayTomorrowPrecipitation(data.weather_data.daily[1].pop);
+    displayTomorrowHumidity(data.weather_data.daily[1].humidity);
+    displayTomorrowUltravioletIndex(data.weather_data.daily[1].uvi);
 }
 
 function displayHeaderData(localDescription, localName) {
@@ -148,15 +142,14 @@ function displaySunrise(sunrise, timezoneOffset) {
     let sunriseMilliseconds = sunriseUnixTimestamp * 1000;
     let sunriseObject = new Date(sunriseMilliseconds);
     let sunriseHours = sunriseObject.getUTCHours();
-
     if (timezone < 0) {
         sunriseHours = sunriseHours - timezone.toString().substring(1);
     } else {
         sunriseHours = sunriseHours + timezone;
     } 
-
-    if (sunriseHours > 24) sunriseHours = sunriseHours - 24;
-
+    if (sunriseHours > 24) {
+        sunriseHours = sunriseHours - 24;
+    }
     let hoursAdjusted = sunriseHours < 10 ? `0${sunriseHours}` : sunriseHours;
     let minutesAdjusted = sunriseObject.getMinutes() < 10 ? `0${sunriseObject.getMinutes()}` : sunriseObject.getMinutes();
     document.querySelector('.local-sunrise').innerHTML = `<span class="title-color">Sunrise:</span> ${hoursAdjusted}:${minutesAdjusted}`;
@@ -168,15 +161,14 @@ function displaySunset(sunset, timezoneOffset) {
     let sunsetMilliseconds = sunsetUnixTimestamp * 1000;
     let sunsetObject = new Date(sunsetMilliseconds);
     let sunsetHours = sunsetObject.getUTCHours() + 24;
-
     if (timezone < 0) {
         sunsetHours = sunsetHours - timezone.toString().substring(1);
     } else {
         sunsetHours = sunsetHours + timezone;
     }
-
-    if (sunsetHours > 24) sunsetHours = sunsetHours - 24;
-
+    if (sunsetHours > 24) {
+        sunsetHours = sunsetHours - 24;
+    }
     let hoursAdjusted = sunsetHours < 10 ? `0${sunsetHours}` : sunsetHours;
     let minutesAdjusted = sunsetObject.getMinutes() < 10 ? `0${sunsetObject.getMinutes()}` : sunsetObject.getMinutes();
     document.querySelector('.local-sunset').innerHTML = `<span class="title-color">Sunset:</span> ${hoursAdjusted}:${minutesAdjusted}`;
@@ -242,45 +234,29 @@ function getAirQualityParameter(parameter) {
     return parameters[parameter] || parameters.default;
 }
 
-// function displayWeather(data, name) {
-//     setTimeout(() => weatherData.classList.add('weather-data-display'), 200);
-//     localName.innerHTML = name;
-//     getIcon(data.weather_data.current.weather[0].icon, localIcon);
-//     const description = data.weather_data.current.weather[0].description;
-//     const descriptionToUpperCase = description.charAt(0).toUpperCase();
-//     const descriptionToLowerCase = description.slice(1).toLowerCase();
-//     const descriptionAdjusted = descriptionToUpperCase + descriptionToLowerCase;
-//     localDescription.innerHTML = descriptionAdjusted;
-//     getTemperatureLastUpdated();
-//     localTemperatureCurrent.innerHTML = `<span class="title-info">Temperature: </span>${data.weather_data.current.temp.toFixed(1)}º C`;
-//     localTemperatureFeelsLike.innerHTML = `<span class="title-info">Feels like: </span>${data.weather_data.current.feels_like.toFixed(1)}º C`;
-//     localTemperatureMinimum.innerHTML = `${data.weather_data.daily[0].temp.min.toFixed(1)}º C`;
-//     localTemperatureMaximum.innerHTML = `${data.weather_data.daily[0].temp.max.toFixed(1)}º C`;
-//     getSunriseAndSunset(data);
-//     localPrecipitation.innerHTML = `<span class="title-info">Probability of precipitation: </span>${(data.weather_data.daily[0].pop * 100).toFixed(0)}%`;
-//     localHumidity.innerHTML = `<span class="title-info">Humidity: </span>${data.weather_data.current.humidity}%`;
-//     localWindSpeed.innerHTML = `<span class="title-info">Wind speed: </span>${data.weather_data.current.wind_speed} m/s`;
-//     localWindDirection.innerHTML = `<span class="title-info">Wind direction: </span>${data.weather_data.current.wind_deg}º`;
-//     localVisibility.innerHTML = `<span class="title-info">Visibility: </span>${data.weather_data.current.visibility / 1000} km`;
-//     localCloudiness.innerHTML = `<span class="title-info">Cloudiness: </span>${data.weather_data.current.clouds}%`;
-//     localPressure.innerHTML = `<span class="title-info">Atmospheric pressure: </span>${data.weather_data.current.pressure} nPa`;
-//     localUV.innerHTML = `<span class="title-info">Ultraviolet index: </span>${data.weather_data.current.uvi}`;
-//     getAirQuality(data);
-//     getIcon(data.weather_data.daily[1].weather[0].icon, tomorrowIcon);
+function displayTomorrowHeader(description) {
+    document.querySelector('.tomorrow-average-description').innerHTML = `<span class="title-color">Average weather:</span> ${description}`;
+}
 
-//     tomorrowAverageDescription.innerHTML = `<span class="title-info">Average weather: </span>${data.weather_data.daily[1].weather[0].description}`;
-//     tomorrowTemperatureMorning.innerHTML = `<span class="title-info">Morning<br/></span>${data.weather_data.daily[1].temp.morn.toFixed(1)}º C`;
-//     tomorrowTemperatureEvening.innerHTML = `<span class="title-info">Evening<br/></span>${data.weather_data.daily[1].temp.eve.toFixed(1)}º C`;
-//     tomorrowTemperatureNight.innerHTML = `<span class="title-info">Night<br/></span>${data.weather_data.daily[1].temp.night.toFixed(1)}º C`;
-//     tomorrowTemperatureMinimum.innerHTML = `${data.weather_data.daily[1].temp.min.toFixed(1)}º C`;
-//     tomorrowTemperatureMaximum.innerHTML = `${data.weather_data.daily[1].temp.max.toFixed(1)}º C`;
-//     tomorrowPrecipitation.innerHTML = `<span class="title-info">Probability of precipitation: </span>${(data.weather_data.daily[1].pop * 100).toFixed(0)}%`;
-//     tomorrowHumidity.innerHTML = `<span class="title-info">Humidity: </span>${data.weather_data.daily[1].humidity}%`;
-//     tomorrowUV.innerHTML = `<span class="title-info">Ultraviolet index: </span>${data.weather_data.daily[1].uvi}`;
+function displayTomorrowTemperature(temperature) {
+    document.querySelector('.tomorrow-temperature-morning').innerHTML = `<span class="title-color">Morning<br/></span>${temperature.morn.toFixed(1)}º C`;
+    document.querySelector('.tomorrow-temperature-evening').innerHTML = `<span class="title-color">Evening<br/></span>${temperature.eve.toFixed(1)}º C`;
+    document.querySelector('.tomorrow-temperature-night').innerHTML = `<span class="title-color">Night<br/></span>${temperature.night.toFixed(1)}º C`;
+    document.querySelector('.tomorrow-temperature-minimum').innerHTML = `${temperature.min.toFixed(1)}º C`;
+    document.querySelector('.tomorrow-temperature-maximum').innerHTML = `${temperature.max.toFixed(1)}º C`;
+}
 
-// }
+function displayTomorrowPrecipitation(precipitation) {
+    document.querySelector('.tomorrow-precipitation').innerHTML = `<span class="title-color">Probability of precipitation:</span> ${(precipitation * 100).toFixed(0)}%`;
+}
 
+function displayTomorrowHumidity(humidity) {
+    document.querySelector('.tomorrow-humidity').innerHTML = `<span class="title-color">Humidity:</span> ${humidity}%`;
+}
 
+function displayTomorrowUltravioletIndex(uv) {
+    document.querySelector('.tomorrow-uv').innerHTML = `<span class="title-color">Ultraviolet index:</span> ${uv}`;
+}
 
 function displayLoadingWeather() {
     loadingWeather.style.display = 'block';
@@ -295,20 +271,20 @@ function showMore() {
     moreWeatherData.style.display = 'block';
 }
 
-function scrollToTop() {
-    window.scroll({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      });
-}
-
 function openMoreInfo() {
     moreInfo.style.display = 'block';
 }
 
 function closeMoreInfo() {
     moreInfo.style.display = 'none';
+}
+
+function scrollToTop() {
+    window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
 }
 
 function resetApplication() {
