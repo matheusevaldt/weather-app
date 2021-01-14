@@ -72,7 +72,7 @@ header input {
     border-radius: 18px;
     background-color: var(--dark-color);
     color: var(--white-color);
-    transition: all 0.2s linear;
+    transition: all 0.3s linear;
 }
 
 header input::placeholder {
@@ -134,6 +134,10 @@ main {
     font-weight: 600;
 }
 
+.title-color {
+    color: var(--grey-color);
+}
+
 .weather-data {
     display: none;
 }
@@ -143,15 +147,14 @@ main {
     position: relative;
     top: -30px;
     opacity: 0;
-    animation: show-data 0.4s linear forwards;
+    animation: weather-data-display 0.4s linear forwards;
 }
 
-@keyframes show-data {
+@keyframes weather-data-display {
     0% {
         top: -30px;
         opacity: 0;
-    }
-    100% {
+    } 100% {
         top: 0px;
         opacity: 1;
     }
@@ -161,7 +164,7 @@ main {
     line-height: 22px;
 }
 
-.weather-data-header{
+.weather-header {
     width: 80%;
     text-align: center;
     margin: 0 auto;
@@ -170,36 +173,55 @@ main {
     padding-bottom: 20px;
 }
 
-.weather-data-header p:first-of-type {
+.weather-header p:first-of-type {
     font-weight: 700;
 }
 
-.local-icon img,
+.location-icon img,
 .tomorrow-icon img {
     width: 64px;
     height: 64px;
     margin: 15px 0 10px 0;
 }
 
-.weather-current-feels-like {
-    padding: 20px;
+.weather-overview {
+    padding: 20px 20px 0 20px;
+    margin-bottom: 25px;
 }
 
-.weather-min-max {
-    padding: 0 20px;
-}
-
-.title-color {
-    color: var(--grey-color);
-}
-
-.temperature-last-updated {
+.weather-overview > p:first-of-type {
     margin-bottom: 15px;
     font-size: 0.95em;
     text-align: center;
 }
 
-.weather-min-max img,
+.weather-overview > div {
+    display: flex;
+}
+
+.weather-overview > div img {
+    width: 48px;
+    height: 48px;
+    position: relative;
+    left: -2px;
+    margin-right: 5px;
+}
+
+.weather-overview > div:nth-of-type(1) {
+    margin: 20px 0 15px 0;
+}
+
+.weather-overview > div > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.weather-overview > div > div p:last-child {
+    padding-left: 1px;
+}
+
+
 .tomorrow-min-max img {
     width: 48px;
     height: 48px;
@@ -208,20 +230,15 @@ main {
     margin-right: 5px;
 }
 
-.minimum-temperature,
-.maximum-temperature,
 .tomorrow-min,
 .tomorrow-max {
     display: flex;
 }
 
-.minimum-temperature,
 .tomorrow-min {
     margin-bottom: 15px;
 }
 
-.minimum-temperature-info,
-.maximum-temperature-info,
 .tomorrow-min-info,
 .tomorrow-max-info {
     display: flex;
@@ -229,28 +246,22 @@ main {
     justify-content: center;
 }
 
-.minimum-temperature-info p:last-child,
-.maximum-temperature-info p:last-child,
 .tomorrow-min-info p:last-child,
 .tomorrow-max-info p:last-child {
     padding-left: 1px;
 }
 
-.more-data {
-    margin-top: 25px;
-}
-
 .button-show-more {
-    padding: 10px 13px;
+    display: block;
+    margin: 0 auto;
+    width: 110px;
+    padding: 10px 0;
     background-color: var(--blue-color);
     color: var(--white-color);
     font-weight: 600;
     font-size: 0.95em;
     border: none;
     border-radius: 5px;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
     transition: background-color 0.4s ease-out;
 }
 
@@ -547,18 +558,18 @@ main {
         top: -3px;
     }
 
-    .weather-data-header{
+    .weather-header{
         width: 70%;
     }
     
-    .local-icon img,
+    .location-icon img,
     .tomorrow-icon img {
         width: 84px;
         height: 84px;
         margin: 16px 0;
     }
     
-    .weather-current-feels-like {
+    .weather-overview {
         padding: 30px 20px;
     }
 

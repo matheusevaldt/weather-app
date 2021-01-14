@@ -1,7 +1,7 @@
 // Global variables.
 const searchInput = document.querySelector('.search-input');
 const searchBox = new google.maps.places.SearchBox(searchInput);
-const localIcon = document.querySelector('.local-icon');
+const locationIcon = document.querySelector('.location-icon');
 const tomorrowIcon = document.querySelector('.tomorrow-icon');
 const loadingWeather = document.querySelector('.loading-weather');
 const errorNotification = document.querySelector('.error-notification');
@@ -28,14 +28,14 @@ searchBox.addListener('places_changed', async () => {
     try {
         resetApplication();
         displayLoadingWeather();
-        const local = searchBox.getPlaces()[0];
-        const latitude = local.geometry.location.lat();
-        const longitude = local.geometry.location.lng(); 
-        const localName = local.formatted_address;
+        const location = searchBox.getPlaces()[0];
+        const latitude = location.geometry.location.lat();
+        const longitude = location.geometry.location.lng(); 
+        const name = location.formatted_address;
         const options = {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
+                'Accept': 'application/json, text/plain',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -52,7 +52,7 @@ searchBox.addListener('places_changed', async () => {
             errorNotification.style.display = 'flex';
             return;
         }
-        assignData(weather, localName);
+        assignData(weather, name);
     } catch (err) {
         console.error(err);
     }
@@ -61,7 +61,7 @@ searchBox.addListener('places_changed', async () => {
 function assignData(data, name) {
     setTimeout(() => weatherData.classList.add('weather-data-display'), 200);
     displayHeaderData(data.weather_data.current.weather[0].description, name);
-    displayIcons(data.weather_data.current.weather[0].icon, localIcon);
+    displayIcons(data.weather_data.current.weather[0].icon, locationIcon);
     displayTemperature(data.weather_data);
     displayTemperatureLastUpdated();
     displaySunrise(data.weather_data.current.sunrise, data.weather_data.timezone_offset);
@@ -82,13 +82,13 @@ function assignData(data, name) {
     displayTomorrowUltravioletIndex(data.weather_data.daily[1].uvi);
 }
 
-function displayHeaderData(localDescription, localName) {
-    const description = localDescription;
-    const descriptionToUpperCase = description.charAt(0).toUpperCase();
-    const descriptionToLowerCase = description.slice(1).toLowerCase();
+function displayHeaderData(description, name) {
+    const descriptionRaw = description;
+    const descriptionToUpperCase = descriptionRaw.charAt(0).toUpperCase();
+    const descriptionToLowerCase = descriptionRaw.slice(1).toLowerCase();
     const descriptionAdjusted = descriptionToUpperCase + descriptionToLowerCase;
-    document.querySelector('.local-description').innerHTML = descriptionAdjusted;
-    document.querySelector('.local-name').innerHTML = localName;
+    document.querySelector('.location-description').innerHTML = descriptionAdjusted;
+    document.querySelector('.location-name').innerHTML = name;
 }
 
 function displayIcons(id, where) {
@@ -117,14 +117,14 @@ function displayIcons(id, where) {
 }
 
 function displayTemperature(temperature) {
-    const localTemperatureCurrent = document.querySelector('.local-temperature-current');
-    const localTemperatureMinimum = document.querySelector('.local-temperature-minimum');
-    const localTemperatureMaximum = document.querySelector('.local-temperature-maximum');
-    const localTemperatureFeelsLike = document.querySelector('.local-temperature-feels-like');
-    localTemperatureCurrent.innerHTML = `<span class="title-color">Temperature:</span> ${temperature.current.temp.toFixed(1)}º C`;
-    localTemperatureMinimum.innerHTML = `${temperature.daily[0].temp.min.toFixed(1)}º C`;
-    localTemperatureMaximum.innerHTML = `${temperature.daily[0].temp.max.toFixed(1)}º C`;
-    localTemperatureFeelsLike.innerHTML = `<span class="title-color">Feels like:</span> ${temperature.current.feels_like.toFixed(1)}º C`;
+    const currentTemperature = document.querySelector('.current-temperature');
+    const minimumTemperature = document.querySelector('.minimum-temperature');
+    const maximumTemperature = document.querySelector('.maximum-temperature');
+    const feelsLikeTemperature = document.querySelector('.feels-like-temperature');
+    currentTemperature.innerHTML = `<span class="title-color">Temperature:</span> ${temperature.current.temp.toFixed(1)}º C`;
+    minimumTemperature.innerHTML = `${temperature.daily[0].temp.min.toFixed(1)}º C`;
+    maximumTemperature.innerHTML = `${temperature.daily[0].temp.max.toFixed(1)}º C`;
+    feelsLikeTemperature.innerHTML = `<span class="title-color">Feels like:</span> ${temperature.current.feels_like.toFixed(1)}º C`;
 }
 
 function displayTemperatureLastUpdated() {
