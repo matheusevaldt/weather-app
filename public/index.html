@@ -19,14 +19,12 @@
     <main>
 
         <div class="weather-data">
-
-            <div class="weather-header">
+            <div>
                 <p class="location-name"></p>
                 <div class="location-icon"></div>
                 <p class="location-description"></p>
             </div>
-
-            <div class="weather-overview">
+            <div>
                 <p class="temperature-last-updated"></p>
                 <p class="current-temperature"></p>
                 <p class="feels-like-temperature"></p>
@@ -45,105 +43,91 @@
                     </div>
                 </div>
             </div>
-
             <button class="button-show-more">Show more</button>
-
             <div class="more-weather-data">
-
-                <div class="weather-sunrise-sunset">
-                    <div class="sunrise-info">
+                <div>
+                    <div>
                         <img src="images/sunrise.png" alt="Sunrise">
-                        <p class="local-sunrise"></p>
+                        <p class="location-sunrise"></p>
                     </div>
-                    <div class="sunset-info">
+                    <div>
                         <img src="images/sunset.png" alt="Sunset">
-                        <p class="local-sunset"></p>
+                        <p class="location-sunset"></p>
                     </div>
                 </div>
-
-                <div class="weather-wind">
+                <div>
                     <img src="images/wind.png" alt="Wind">
-                    <div class="wind-info">
-                        <p class="local-wind-speed"></p>
-                        <p class="local-wind-direction"></p>
+                    <div>
+                        <p class="location-wind-speed"></p>
+                        <p class="location-wind-direction"></p>
                     </div>
                 </div>
-
-                <p class="local-precipitation"></p>
-                <p class="local-humidity"></p>
-                <p class="local-visibility"></p>
-                <p class="local-cloudiness"></p>
-                <p class="local-pressure"></p>
-                <p class="local-uv"></p>
-                <p class="local-air-quality"></p>
-
-                <div class="weather-tomorrow">
-
-                    <div class="tomorrow-data">
-                        <p>Tomorrow's weather</p><span></span>
+                <p class="location-precipitation"></p>
+                <p class="location-humidity"></p>
+                <p class="location-visibility"></p>
+                <p class="location-cloudiness"></p>
+                <p class="location-pressure"></p>
+                <p class="location-uv"></p>
+                <p class="location-air-quality"></p>
+                <div class="tomorrow-weather">
+                    <div>
+                        <p>Tomorrow's weather</p>
+                        <span></span>
                     </div>
-
-                    <div class="tomorrow-header">
-                        <p class="tomorrow-icon"></p>
-                        <p class="tomorrow-average-description"></p>
+                    <div>
+                        <div class="tomorrow-icon"></div>
+                        <p class="tomorrow-average-weather"></p>
                     </div>
-
-                    <div class="tomorrow-temperatures">
+                    <div>
                         <p class="tomorrow-temperature-morning"></p>
                         <p class="tomorrow-temperature-evening"></p>
                         <p class="tomorrow-temperature-night"></p>
                     </div>
-
-                    <div class="tomorrow-min-max">
-                        <div class="tomorrow-min">
-                            <img src="images/minimum-temperature.png" alt="Tomorrow's minimum">
-                            <div class="tomorrow-min-info">
-                                <p class="title-info">Tomorrow's minimum</p>
+                    <div>
+                        <div>
+                            <img src="images/minimum-temperature.png" alt="Tomorrow's minimum temperature">
+                            <div>
+                                <p class="title-color">Tomorrow's minimum</p>
                                 <p class="tomorrow-temperature-minimum"></p>
                             </div>
                         </div>
-                        <div class="tomorrow-max">
-                            <img src="images/maximum-temperature.png" alt="Tomorrow's maximum">
-                            <div class="tomorrow-max-info">
-                                <p class="title-info">Tomorrow's maximum</p>
+                        <div>
+                            <img src="images/maximum-temperature.png" alt="Tomorrow's maximum temperature">
+                            <div>
+                                <p class="title-color">Tomorrow's maximum</p>
                                 <p class="tomorrow-temperature-maximum"></p>  
                             </div>
                         </div>
                     </div>
-                    
                     <p class="tomorrow-precipitation"></p>
                     <p class="tomorrow-humidity"></p>
                     <p class="tomorrow-uv"></p>
-
-                    <div class="buttons">
-                        <button class="button-open-more-info">Credits and info</button>
+                    <div>
+                        <button class="button-open-credits">Credits</button>
                         <button class="button-scroll-to-top">Scroll to the top</button>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
 
-        <div class="more-info">
-            <div class="more-info-apis">
+        <div class="credits">
+            <div>
                 <h1>APIs</h1>
                 <p>The following APIs are used to fetch the information the user requires.</p>
-                <a class="smaller-a" href="https://openweathermap.org/" target="_blank">Open Weather Map</a>
-                <a class="smaller-a" href="https://openaq.org/" target="_blank">Open Air Quality</a>
-                <p>The autocomplete dropdown menu is powered by <a href="https://www.google.com/" target="_blank">Google</a> and it uses the following APIs:</p>
-                <a class="smaller-a" href="https://developers.google.com/maps/documentation/javascript/places" target="_blank">Places API</a>
-                <a class="smaller-a" href="https://developers.google.com/maps/documentation/javascript/overview" target="_blank">Maps JavaScript API</a>
+                <a class="small-a" href="https://openweathermap.org/" target="_blank" rel="noopener">Open Weather Map</a>
+                <a class="small-a" href="https://openaq.org/" target="_blank" rel="noopener">Open Air Quality</a>
+                <p>The autocomplete dropdown menu is powered by <a href="https://www.google.com/" target="_blank" rel="noopener">Google</a> and it uses the following APIs:</p>
+                <a class="small-a" href="https://developers.google.com/maps/documentation/javascript/places" target="_blank" rel="noopener">Places API</a>
+                <a class="small-a" href="https://developers.google.com/maps/documentation/javascript/overview" target="_blank" rel="noopener">Maps JavaScript API</a>
             </div>
-            <div class="more-info-icons">
+            <div>
                 <h1>Icons</h1>
-                <p>The icons used in this application can be found in the website <a href="https://www.flaticon.com/" target="_blank">flaticon.com</a>.</p>
+                <p>The icons used in this application can be found in the website <a href="https://www.flaticon.com/" target="_blank" rel="noopener">flaticon.com</a>.</p>
                 <p>The icons used in this application were created by these two authors:</p>
-                <a class="smaller-a" href="https://www.flaticon.com/authors/freepik" target="_blank">Freepik</a>
-                <a class="smaller-a" href="https://www.flaticon.com/authors/bqlqn" target="_blank">bqlqn</a>
+                <a class="small-a" href="https://www.flaticon.com/authors/freepik" target="_blank" rel="noopener">Freepik</a>
+                <a class="small-a" href="https://www.flaticon.com/authors/bqlqn" target="_blank" rel="noopener">bqlqn</a>
             </div>
-            <button class="button-close-more-info">Close window</button>
+            <button class="button-close-credits">Close credits</button>
         </div>
 
         <div class="error-notification">

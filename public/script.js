@@ -9,15 +9,15 @@ const weatherData = document.querySelector('.weather-data');
 const buttonShowMore = document.querySelector('.button-show-more');
 const moreWeatherData = document.querySelector('.more-weather-data');
 const buttonScrollToTop = document.querySelector('.button-scroll-to-top');
-const moreInfo = document.querySelector('.more-info');
-const buttonOpenMoreInfo = document.querySelector('.button-open-more-info');
-const buttonCloseMoreInfo = document.querySelector('.button-close-more-info');
+const credits = document.querySelector('.credits');
+const buttonOpenCredits = document.querySelector('.button-open-credits');
+const buttonCloseCredits = document.querySelector('.button-close-credits');
 
 // Event listeners.
 buttonShowMore.addEventListener('click', showMore);
 buttonScrollToTop.addEventListener('click', scrollToTop);
-buttonOpenMoreInfo.addEventListener('click', openMoreInfo);
-buttonCloseMoreInfo.addEventListener('click', closeMoreInfo);
+buttonOpenCredits.addEventListener('click', openCredits);
+buttonCloseCredits.addEventListener('click', closeCredits);
 
 // Whenever the user selects one of the places that were showing in the autocomplete dropbox list, do the following:
 // - Get the latitude and longitude of the selected place.
@@ -152,7 +152,7 @@ function displaySunrise(sunrise, timezoneOffset) {
     }
     let hoursAdjusted = sunriseHours < 10 ? `0${sunriseHours}` : sunriseHours;
     let minutesAdjusted = sunriseObject.getMinutes() < 10 ? `0${sunriseObject.getMinutes()}` : sunriseObject.getMinutes();
-    document.querySelector('.local-sunrise').innerHTML = `<span class="title-color">Sunrise:</span> ${hoursAdjusted}:${minutesAdjusted}`;
+    document.querySelector('.location-sunrise').innerHTML = `<span class="title-color">Sunrise:</span> ${hoursAdjusted}:${minutesAdjusted}`;
 }
 
 function displaySunset(sunset, timezoneOffset) {
@@ -171,52 +171,52 @@ function displaySunset(sunset, timezoneOffset) {
     }
     let hoursAdjusted = sunsetHours < 10 ? `0${sunsetHours}` : sunsetHours;
     let minutesAdjusted = sunsetObject.getMinutes() < 10 ? `0${sunsetObject.getMinutes()}` : sunsetObject.getMinutes();
-    document.querySelector('.local-sunset').innerHTML = `<span class="title-color">Sunset:</span> ${hoursAdjusted}:${minutesAdjusted}`;
+    document.querySelector('.location-sunset').innerHTML = `<span class="title-color">Sunset:</span> ${hoursAdjusted}:${minutesAdjusted}`;
 }
 
 function displayWind(wind) {
-    document.querySelector('.local-wind-speed').innerHTML = `<span class="title-color">Wind speed:</span> ${wind.wind_speed} m/s`;
-    document.querySelector('.local-wind-direction').innerHTML = `<span class="title-color">Wind direction:</span> ${wind.wind_deg}º`;
+    document.querySelector('.location-wind-speed').innerHTML = `<span class="title-color">Wind speed:</span> ${wind.wind_speed} m/s`;
+    document.querySelector('.location-wind-direction').innerHTML = `<span class="title-color">Wind direction:</span> ${wind.wind_deg}º`;
 }
 
 function displayPrecipitation(precipitation) {
-    document.querySelector('.local-precipitation').innerHTML = `<span class="title-color">Probability of precipitation:</span> ${(precipitation * 100).toFixed(0)}%`;
+    document.querySelector('.location-precipitation').innerHTML = `<span class="title-color">Probability of precipitation:</span> ${(precipitation * 100).toFixed(0)}%`;
 }
 
 function displayHumidity(humidity) {
-    document.querySelector('.local-humidity').innerHTML = `<span class="title-color">Humidity:</span> ${humidity}%`;
+    document.querySelector('.location-humidity').innerHTML = `<span class="title-color">Humidity:</span> ${humidity}%`;
 }
 
 function displayVisibility(visibility) {
-    document.querySelector('.local-visibility').innerHTML = `<span class="title-color">Visibility:</span> ${visibility / 1000} km`;
+    document.querySelector('.location-visibility').innerHTML = `<span class="title-color">Visibility:</span> ${visibility / 1000} km`;
 }
 
 function displayCloudiness(cloudiness) {
-    document.querySelector('.local-cloudiness').innerHTML = `<span class="title-color">Cloudiness:</span> ${cloudiness}%`;
+    document.querySelector('.location-cloudiness').innerHTML = `<span class="title-color">Cloudiness:</span> ${cloudiness}%`;
 }
 
 function displayPressure(pressure) {
-    document.querySelector('.local-pressure').innerHTML = `<span class="title-color">Atmospheric pressure:</span> ${pressure} nPa`;
+    document.querySelector('.location-pressure').innerHTML = `<span class="title-color">Atmospheric pressure:</span> ${pressure} nPa`;
 }
 
 function displayUltravioletIndex(uv) {
-    document.querySelector('.local-uv').innerHTML = `<span class="title-color">Ultraviolet index:</span> ${uv}`;
+    document.querySelector('.location-uv').innerHTML = `<span class="title-color">Ultraviolet index:</span> ${uv}`;
 }
 
 function displayAirQuality(data) {
-    const localAirQuality = document.querySelector('.local-air-quality');
+    const locationAirQuality = document.querySelector('.location-air-quality');
     if (data.results.length !== 0) {
         const airQuality = data.results[0].measurements[0];
         const lastUpdated = airQuality.lastUpdated.split('T')[0];
         const lastUpdatedSplitted = lastUpdated.split('-');
         const lastUpdatedAdjusted = `${lastUpdatedSplitted[2]}/${lastUpdatedSplitted[1]}/${lastUpdatedSplitted[0]}`
-        localAirQuality.innerHTML = `
+        locationAirQuality.innerHTML = `
             <span class="title-color">Air quality:</span> 
             ${getAirQualityParameter(airQuality.parameter)} is at ${airQuality.value.toFixed(1)} ${airQuality.unit}. 
             Last updated in ${lastUpdatedAdjusted}.
         `;
     } else {
-        localAirQuality.innerHTML = '<span class="title-color">No data about air quality.</span>';
+        locationAirQuality.innerHTML = '<span class="title-color">No data about air quality.</span>';
     }
 }
 
@@ -235,7 +235,7 @@ function getAirQualityParameter(parameter) {
 }
 
 function displayTomorrowHeader(description) {
-    document.querySelector('.tomorrow-average-description').innerHTML = `<span class="title-color">Average weather:</span> ${description}`;
+    document.querySelector('.tomorrow-average-weather').innerHTML = `<span class="title-color">Average weather:</span> ${description}`;
 }
 
 function displayTomorrowTemperature(temperature) {
@@ -271,12 +271,12 @@ function showMore() {
     moreWeatherData.style.display = 'block';
 }
 
-function openMoreInfo() {
-    moreInfo.style.display = 'block';
+function openCredits() {
+    credits.style.display = 'block';
 }
 
-function closeMoreInfo() {
-    moreInfo.style.display = 'none';
+function closeCredits() {
+    credits.style.display = 'none';
 }
 
 function scrollToTop() {
@@ -293,5 +293,5 @@ function resetApplication() {
     errorNotification.style.display = 'none';
     buttonShowMore.style.display = 'block';
     moreWeatherData.style.display = 'none';
-    moreInfo.style.display = 'none';
+    credits.style.display = 'none';
 }
