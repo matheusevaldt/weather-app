@@ -3,11 +3,12 @@ const searchInput = document.querySelector('.search-input');
 const searchBox = new google.maps.places.SearchBox(searchInput);
 const locationIcon = document.querySelector('.location-icon');
 const tomorrowIcon = document.querySelector('.tomorrow-icon');
+const locationAirQuality = document.querySelector('.location-air-quality');
 const loadingWeather = document.querySelector('.loading-weather');
 const errorNotification = document.querySelector('.error-notification');
-const weatherData = document.querySelector('.weather-data');
+const weather = document.querySelector('.weather');
 const buttonShowMore = document.querySelector('.button-show-more');
-const moreWeatherData = document.querySelector('.more-weather-data');
+const moreWeather = document.querySelector('.more-weather');
 const buttonScrollToTop = document.querySelector('.button-scroll-to-top');
 const credits = document.querySelector('.credits');
 const buttonOpenCredits = document.querySelector('.button-open-credits');
@@ -35,7 +36,7 @@ searchBox.addListener('places_changed', async () => {
         const options = {
             method: 'POST',
             headers: {
-                'Accept': 'application/json, text/plain',
+                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -43,23 +44,35 @@ searchBox.addListener('places_changed', async () => {
                 longitude: longitude
             })
         }
-        const response = await fetch('/weather', options);
-        const weather = await response.json();
-        console.log(weather);
+        fetchAirQuality(options);
+        const weatherResponse = await fetch('/weather', options);
+        const weatherData = await weatherResponse.json();
+        console.log(weatherData);
         hideLoadingWeather();
-        if (weather[0] === 'Error') {
-            weatherData.classList.remove('weather-data-display');
-            errorNotification.style.display = 'flex';
-            return;
-        }
-        assignData(weather, name);
+        if (weatherData[0] === 'Error') throw new Error;
+        assignWeatherData(weatherData, name);
     } catch (err) {
         console.error(err);
+        weather.classList.remove('weather-display');
+        errorNotification.style.display = 'flex';
     }
 });
 
-function assignData(data, name) {
-    setTimeout(() => weatherData.classList.add('weather-data-display'), 200);
+async function fetchAirQuality(options) {
+    try {
+        const airQualityResponse = await fetch('/air-quality', options);
+        const airQualityData = await airQualityResponse.json();
+        console.log(airQualityData);
+        if (airQualityData[0] === 'Error') throw new Error;
+        displayAirQuality(airQualityData.air_quality_data);
+    } catch (err) {
+        console.log(err);
+        locationAirQuality.innerHTML = '<span class="title-color">Air quality:</span> unable to fetch the air quality data.';
+    }
+}
+
+function assignWeatherData(data, name) {
+    setTimeout(() => weather.classList.add('weather-display'), 200);
     displayHeaderData(data.weather_data.current.weather[0].description, name);
     displayIcons(data.weather_data.current.weather[0].icon, locationIcon);
     displayTemperature(data.weather_data);
@@ -73,7 +86,6 @@ function assignData(data, name) {
     displayCloudiness(data.weather_data.current.clouds);
     displayPressure(data.weather_data.current.pressure);
     displayUltravioletIndex(data.weather_data.current.uvi);
-    displayAirQuality(data.air_quality_data);
     displayTomorrowHeader(data.weather_data.daily[1].weather[0].description);
     displayIcons(data.weather_data.daily[1].weather[0].icon, tomorrowIcon);
     displayTomorrowTemperature(data.weather_data.daily[1].temp);
@@ -204,7 +216,6 @@ function displayUltravioletIndex(uv) {
 }
 
 function displayAirQuality(data) {
-    const locationAirQuality = document.querySelector('.location-air-quality');
     if (data.results.length !== 0) {
         const airQuality = data.results[0].measurements[0];
         const lastUpdated = airQuality.lastUpdated.split('T')[0];
@@ -216,7 +227,7 @@ function displayAirQuality(data) {
             Last updated in ${lastUpdatedAdjusted}.
         `;
     } else {
-        locationAirQuality.innerHTML = '<span class="title-color">No data about air quality.</span>';
+        locationAirQuality.innerHTML = '<span class="title-color">This location has no data for air quality.</span>';
     }
 }
 
@@ -268,7 +279,7 @@ function hideLoadingWeather() {
 
 function showMore() {
     buttonShowMore.style.display = 'none';
-    moreWeatherData.style.display = 'block';
+    moreWeather.style.display = 'block';
 }
 
 function openCredits() {
@@ -289,9 +300,9 @@ function scrollToTop() {
 
 function resetApplication() {
     searchInput.value = '';
-    weatherData.classList.remove('weather-data-display');
+    weather.classList.remove('weather-display');
     errorNotification.style.display = 'none';
     buttonShowMore.style.display = 'block';
-    moreWeatherData.style.display = 'none';
+    moreWeather.style.display = 'none';
     credits.style.display = 'none';
 }
