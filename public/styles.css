@@ -21,6 +21,7 @@
 
 :root {
     --blue-color: #00adb5;
+    --blue-color-hover: #008086;
     --dark-color: #393e46;
     --darker-color: #222831;
     --white-color: #ffffff;
@@ -119,9 +120,8 @@ main {
     width: 80%;
     text-align: center;
     margin: 0 auto;
-    padding: 0;
+    padding: 0 0 20px 0;
     border-bottom: 2px solid var(--dark-color);
-    padding-bottom: 20px;
 }
 
 .weather > div:nth-of-type(1) p:first-of-type {
@@ -184,7 +184,7 @@ main {
 }
 
 .button-show-more:hover {
-    background-color: #008086;
+    background-color: var(--blue-color-hover);
 }
 
 .more-weather {
@@ -419,7 +419,7 @@ main {
 }
 
 .button-close-credits:hover {
-    background-color: #008086;
+    background-color: var(--blue-color-hover);
 }
 
 .loading-weather {
@@ -502,6 +502,10 @@ main {
 .pac-item:hover,
 .pac-item-selected {
     background-color: var(--grey-color);
+}
+
+.pac-item:hover {
+    cursor: pointer;
 }
 
 .pac-item-query {

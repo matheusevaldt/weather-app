@@ -20,11 +20,13 @@ buttonScrollToTop.addEventListener('click', scrollToTop);
 buttonOpenCredits.addEventListener('click', openCredits);
 buttonCloseCredits.addEventListener('click', closeCredits);
 
-// Whenever the user selects one of the places that were showing in the autocomplete dropbox list, do the following:
-// - Get the latitude and longitude of the selected place.
-// - Fetch weather and air quality data of the selected place.
-// - If there were errors in the process, display an error message.
-// - Display the fetched data of the selected place in the DOM.
+// Whenever the user selects one of the locations that were showing in the autocomplete menu, do the following:
+// - Display a loading spinner while the data is being fetched.
+// - Get the latitude and longitude of the location.
+// - Fetch the weather and air quality data of the location.
+// '--> If there was an error in fetching the weather data, return an error message.
+// '--> If there was an error in fetching the air quality data, notify the user of that.
+// - Remove the loading spinner and display the fetched data of the location.
 searchBox.addListener('places_changed', async () => {
     try {
         resetApplication();
@@ -60,6 +62,7 @@ searchBox.addListener('places_changed', async () => {
 
 async function fetchAirQuality(options) {
     try {
+        locationAirQuality.innerHTML = '<span class="title-color">Air quality:</span> working on it...';
         const airQualityResponse = await fetch('/air-quality', options);
         const airQualityData = await airQualityResponse.json();
         console.log(airQualityData);
@@ -71,6 +74,7 @@ async function fetchAirQuality(options) {
     }
 }
 
+// Once the weather data has been fetched, assign it to selected elements.
 function assignWeatherData(data, name) {
     setTimeout(() => weather.classList.add('weather-display'), 200);
     displayHeaderData(data.weather_data.current.weather[0].description, name);
@@ -94,6 +98,7 @@ function assignWeatherData(data, name) {
     displayTomorrowUltravioletIndex(data.weather_data.daily[1].uvi);
 }
 
+// Display the name of the location and the description of the weather.
 function displayHeaderData(description, name) {
     const descriptionRaw = description;
     const descriptionToUpperCase = descriptionRaw.charAt(0).toUpperCase();
@@ -103,6 +108,7 @@ function displayHeaderData(description, name) {
     document.querySelector('.location-name').innerHTML = name;
 }
 
+// Display an image that represents the state of the weather.
 function displayIcons(id, where) {
     const icons = {
         '01d': '<img src="images/clear-day.png" alt="Clear sky">',
@@ -128,6 +134,11 @@ function displayIcons(id, where) {
     return where.innerHTML = icons[id] || icons.default;
 }
 
+// Display the following temperatures:
+// - Current;
+// - Feels like;
+// - Today's minimum;
+// - Today's maximum.
 function displayTemperature(temperature) {
     const currentTemperature = document.querySelector('.current-temperature');
     const minimumTemperature = document.querySelector('.minimum-temperature');
@@ -139,6 +150,7 @@ function displayTemperature(temperature) {
     feelsLikeTemperature.innerHTML = `<span class="title-color">Feels like:</span> ${temperature.current.feels_like.toFixed(1)}º C`;
 }
 
+// Display the time in which the temperature was last updated.
 function displayTemperatureLastUpdated() {
     let date = new Date();
     let hours = date.getHours();
@@ -148,6 +160,7 @@ function displayTemperatureLastUpdated() {
     document.querySelector('.temperature-last-updated').innerHTML = `<span class="title-color">Last updated:</span> today at ${hours}:${minutes}`;
 }
 
+// Display the time of the day in which the sunrise occurs.
 function displaySunrise(sunrise, timezoneOffset) {
     let timezone = timezoneOffset / 3600;
     let sunriseUnixTimestamp = sunrise;
@@ -167,6 +180,7 @@ function displaySunrise(sunrise, timezoneOffset) {
     document.querySelector('.location-sunrise').innerHTML = `<span class="title-color">Sunrise:</span> ${hoursAdjusted}:${minutesAdjusted}`;
 }
 
+// Display the time of the day in which the sunset occurs.
 function displaySunset(sunset, timezoneOffset) {
     let timezone = timezoneOffset / 3600;
     let sunsetUnixTimestamp = sunset;
@@ -215,6 +229,8 @@ function displayUltravioletIndex(uv) {
     document.querySelector('.location-uv').innerHTML = `<span class="title-color">Ultraviolet index:</span> ${uv}`;
 }
 
+// If there are records of air quality in this specific location, display the information regarding this topic.
+// If there are no records of air quality in this specific location, inform the user.
 function displayAirQuality(data) {
     if (data.results.length !== 0) {
         const airQuality = data.results[0].measurements[0];
@@ -231,6 +247,7 @@ function displayAirQuality(data) {
     }
 }
 
+// Display the parameter in which the air quality is being measured.
 function getAirQualityParameter(parameter) {
     const parameters = {
         'pm25': 'PM<span style="vertical-align: sub; font-size: 10px">2.5</span> (Particulate Matter 2.5)',
