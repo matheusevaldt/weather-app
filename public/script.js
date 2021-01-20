@@ -135,10 +135,10 @@ function displayIcons(id, where) {
 }
 
 // Display the following temperatures:
-// - Current;
+// - Current temperature;
 // - Feels like;
-// - Today's minimum;
-// - Today's maximum.
+// - Today's minimum temperature;
+// - Today's maximum temperature.
 function displayTemperature(temperature) {
     const currentTemperature = document.querySelector('.current-temperature');
     const minimumTemperature = document.querySelector('.minimum-temperature');
@@ -229,8 +229,8 @@ function displayUltravioletIndex(uv) {
     document.querySelector('.location-uv').innerHTML = `<span class="title-color">Ultraviolet index:</span> ${uv}`;
 }
 
-// If there are records of air quality in this specific location, display the information regarding this topic.
-// If there are no records of air quality in this specific location, inform the user.
+// If there are records of air quality in the specific location, display the information regarding this topic.
+// If there are no records of air quality in the specific location, inform the user.
 function displayAirQuality(data) {
     if (data.results.length !== 0) {
         const airQuality = data.results[0].measurements[0];
@@ -262,10 +262,17 @@ function getAirQualityParameter(parameter) {
     return parameters[parameter] || parameters.default;
 }
 
+// Display the description of tomorrow's weather.
 function displayTomorrowHeader(description) {
     document.querySelector('.tomorrow-average-weather').innerHTML = `<span class="title-color">Average weather:</span> ${description}`;
 }
-
+ 
+// Display the following temperatures for the next day:
+// - Average temperature during the morning;
+// - Average temperature during the evening;
+// - Average temperature during the night;
+// - Tomorrow's maximum temperature;
+// - Tomorrow's minimum temperature.
 function displayTomorrowTemperature(temperature) {
     document.querySelector('.tomorrow-temperature-morning').innerHTML = `<span class="title-color">Morning<br/></span>${temperature.morn.toFixed(1)}º C`;
     document.querySelector('.tomorrow-temperature-evening').innerHTML = `<span class="title-color">Evening<br/></span>${temperature.eve.toFixed(1)}º C`;
@@ -294,6 +301,7 @@ function hideLoadingWeather() {
     loadingWeather.style.display = 'none';
 }
 
+// Display all the weather information fetched from the location's latitude and longitude.
 function showMore() {
     buttonShowMore.style.display = 'none';
     moreWeather.style.display = 'block';

@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static('public'));
 
+// Fetching weather data from the Open Weather Map API using the location's latitude and longitude.
 app.post('/weather', async (request, response) => {
     try {
         const openWeatherMapURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${request.body.latitude}&lon=${request.body.longitude}&exclude=hourly,minutely&appid=${OPENWEATHERMAP_API_KEY}&units=metric`;
@@ -25,6 +26,7 @@ app.post('/weather', async (request, response) => {
     }
 });
 
+// Fetching air quality data from the Open Air Quality API using the location's latitude and longitude.
 app.post('/air-quality', async (request, response) => {
     try {
         const openAirQualityURL = `https://api.openaq.org/v1/latest?coordinates=${request.body.latitude},${request.body.longitude}`;
